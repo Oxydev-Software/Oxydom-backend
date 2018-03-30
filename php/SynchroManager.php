@@ -22,14 +22,11 @@ class SynchroManager
     public static  $conn ;
     public $db = '';
 
-
-
     public static function Test(){
 
         //$conn = new PDO("mysql:host=localhost;dbname=testfilrouge", 'root', '');
         // set the PDO error mode to exception
         //$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 
         //Validator::Validate3(self::$sqltest);
         //self::Validate3();
