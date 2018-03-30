@@ -1,4 +1,6 @@
 <?php
+
+include('config.php');
 /**
  * Created by PhpStorm.
  * User: Faurever
@@ -11,16 +13,71 @@
 class Executor
 {
 
+    //Fonction executant la requete SQL déjà vérifiée
+    public static function Execute($sql){
 
-    public function Execute($query){
+        //Execution REQ
+        try {
+            $conn = new PDO('mysql:host=localhost;dbname=testfilrouge;charset=utf8', 'root', '');
+            // set the PDO error mode to exception
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        /*echo "New Requete sql qu'on va executer dans la BDD ->";
-        echo $sql2;
-        echo " !!";
-        $result3 = $db-> query($sql2);
 
-        echo "<br/>\n<br/><br/><br/>";
-        echo "Resultat de la tentative de l'execution  ->".$result3;
-        //echo $result3;*/
+            // prepare sql and bind parameters
+            $stmt = $conn->prepare($sql);
+            $result = $stmt->execute();
+            echo '<code> <pre>Résultat:'. print_r($result, true) .'</pre></code>';
+
+            if ($result > 0){
+                $comment = 'Requete qui a bien été exécuté, je vais procéder à lenreigistrement dans les log !';
+                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+
+            }
+
+        }
+        catch(PDOException $e)
+        {
+            $comment = 'Requete synthaxiquement incorrecte !';
+            echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+            echo "Error: " . $e->getMessage();
+
+        }
+        $conn = null;
+
     }
+
+    //Fonction sauvegardant les données dans les LOG
+    public static  function SaveInLog($sql, $date, $author){
+        try {
+
+            $values = array(
+                'Requete' => $sql,
+                'DateReq' => $date,
+                'idCommercial' => $author
+            );
+
+            $result = Db::insert(TBL_Log, $values);
+            echo '<code><pre>'. print_r($result, true) .'</pre></code>';
+
+            if ($result > 0){
+                $comment = 'Requete qui a bien été exécuté  dans les log !';
+                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+
+            }
+            else {
+                $comment = 'Requete LOG synthaxiquement incorrecte !';
+                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+            }
+
+        }
+        catch(PDOException $e)
+        {
+            $comment = 'Requete LOG synthaxiquement incorrecte !';
+            echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+            echo "Error: " . $e->getMessage();
+
+        }
+        $conn = null;
+    }
+
 }
