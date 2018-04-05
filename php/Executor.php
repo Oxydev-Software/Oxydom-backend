@@ -1,6 +1,6 @@
 <?php
 
-include('config.php');
+//include('config.php');
 /**
  * Created by PhpStorm.
  * User: Faurever
@@ -33,6 +33,10 @@ class Executor
                 echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
 
             }
+            else {
+                $comment2 = 'Requete incorrecte !';
+                echo '<code><pre>'. print_r($comment2, true) .'</pre></code>';
+            }
 
         }
         catch(PDOException $e)
@@ -48,36 +52,61 @@ class Executor
 
     //Fonction sauvegardant les données dans les LOG
     public static  function SaveInLog($sql, $date, $author){
-        try {
 
+           //$result =  _insertSqlDateFr('18/10/2018');
+            //echo '<code><pre>'. print_r($result, true) .'</pre></code>';
+        $conn = new PDO('mysql:host=localhost;dbname=testfilrouge;charset=utf8', 'root', '');
+        // set the PDO error mode to exception
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            $date2 = _insertSqlDateFr($date);
+        if (trim($sql) != '' && is_numeric($author)){
             $values = array(
-                'Requete' => $sql,
-                'DateReq' => $date,
+                'Requete'      => $sql,
+                'DateReq'      => $date2,
                 'idCommercial' => $author
             );
 
-            $result = Db::insert(TBL_Log, $values);
-            echo '<code><pre>'. print_r($result, true) .'</pre></code>';
-
+            $insertLog = $conn->prepare('insert into '.TBL_Log.'(Requete, DateReq, idCommercial) values (:Requete, :DateReq, :idCommercial)');
+            $result = $insertLog->execute($values);
             if ($result > 0){
                 $comment = 'Requete qui a bien été exécuté  dans les log !';
                 echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
 
             }
             else {
-                $comment = 'Requete LOG synthaxiquement incorrecte !';
-                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+                $comment2 = 'Requete LOG synthaxiquement incorrecte !';
+                echo '<code><pre>'. print_r($comment2, true) .'</pre></code>';
             }
 
         }
-        catch(PDOException $e)
-        {
-            $comment = 'Requete LOG synthaxiquement incorrecte !';
-            echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
-            echo "Error: " . $e->getMessage();
 
+        else {
+            echo 'Erreur requette !';
         }
         $conn = null;
+
+        /*$data = array(
+          array('name' => 'John', 'age' => '25'),
+          array('name' => 'Wendy', 'age' => '32')
+        );
+
+        try {
+          $pdo = new PDO('sqlite:myfile.sqlite');
+        }
+
+        catch(PDOException $e) {
+          die('Unable to open database connection');
+        }
+
+        $insertStatement = $pdo->prepare('insert into mytable (name, age) values (:name, :age)');
+
+        // start transaction
+        $pdo->beginTransaction();
+
+        foreach($data as &$row) {
+          $insertStatement->execute($row);
+        } */
     }
 
 }

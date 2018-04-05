@@ -18,19 +18,19 @@ class SynchroManager
 
     const HOST = 'user';
 
-    public static $sqltest = "INSERT INTO client (nom, prenom) VALUES ('Dupont','Dupond');";
-    public static  $conn ;
-    public $db = '';
 
     public static function Test(){
 
+        $sqltest = "INSERT INTO client (nom, prenom) VALUES ('Test','Test');";
         //$conn = new PDO("mysql:host=localhost;dbname=testfilrouge", 'root', '');
         // set the PDO error mode to exception
         //$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         //Validator::Validate3(self::$sqltest);
         //self::Validate3();
-        Executor::Execute(self::$sqltest);
+        Executor::Execute($sqltest);
+
+        Executor::SaveInLog($sqltest, '18/10/2018', 2);
 
     }
 
