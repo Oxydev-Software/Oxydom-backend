@@ -10,8 +10,8 @@ function __autoload($className){
 }
 
 // Connexion TOM a la BDD
-$db_inst = new DbObj('mysql:host=localhost;dbname=testfilrouge;charset=utf8', 'root', '');
-Db::setInstance($db_inst);
+//$db_inst = new DbObj('mysql:host=localhost;dbname=testfilrouge;charset=utf8', 'root', '');
+//Db::setInstance($db_inst);
 
 /**
  * Convertie la date Fr pour la BDD
@@ -49,10 +49,11 @@ $insert = array(
 Db::insert('client', $insert);
 */
 
-
+/*
 $values = array(
     'Requete'      => 'caca',
     'DateReq'      => '2018-03-30',
     'idCommercial' => 2
 );
 Db::insert(TBL_Log, $values);
+*/

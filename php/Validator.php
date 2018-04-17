@@ -2,8 +2,7 @@
 
 
 //include_once ('config.php');
-
-
+include_once('Tables.php');
 /**
  * Created by PhpStorm.
  * User: Faurever
@@ -67,25 +66,28 @@ class Validator
             // prepare sql and bind parameters
             $stmt = $conn->prepare($sql);
             $result = $stmt->execute();
-            echo '<code> <pre>Résultat:'. print_r($result, true) .'</pre></code>';
+            //echo '<code> <pre>Résultat:'. print_r($result, true) .'</pre></code>';
 
             if ($result > 0){
                 $comment = 'Requete qui a marché, je vais procéder au rollback !';
-                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+                //echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
                 $conn->rollBack();
+                $OkOrNotOK =  true;
             }
             else {
-                $comment = 'Requete synthaxiquement incorrecte !';
-                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+                $comment = 'Requete synthaxiquement incorrecte (<0) !';
+               // echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+                $OkOrNotOK= false;
             }
+
 
         }
         catch(PDOException $e)
         {
-            $comment = 'Requete synthaxiquement incorrecte !';
-            echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
-            echo "Error: " . $e->getMessage();
-
+            $comment = 'Requete synthaxiquement incorrecte (catch) !';
+            //echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+            echo "Error Validator: " . $e->getMessage();
+            $OkOrNotOK= false;
         }
         $conn = null;
 
@@ -115,6 +117,7 @@ class Validator
         //FlashMessage::afficheMessages();
 
         */
+        return $OkOrNotOK;
     }
 
 

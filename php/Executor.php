@@ -26,28 +26,29 @@ class Executor
             // prepare sql and bind parameters
             $stmt = $conn->prepare($sql);
             $result = $stmt->execute();
-            echo '<code> <pre>Résultat:'. print_r($result, true) .'</pre></code>';
+            //echo '<code> <pre>Résultat:'. print_r($result, true) .'</pre></code>';
 
             if ($result > 0){
                 $comment = 'Requete qui a bien été exécuté, je vais procéder à lenreigistrement dans les log !';
-                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
-
+                //echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+                $resultbool = true;
             }
             else {
                 $comment2 = 'Requete incorrecte !';
-                echo '<code><pre>'. print_r($comment2, true) .'</pre></code>';
+                //echo '<code><pre>'. print_r($comment2, true) .'</pre></code>';
+                $resultbool = false;
             }
 
         }
         catch(PDOException $e)
         {
             $comment = 'Requete synthaxiquement incorrecte !';
-            echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
-            echo "Error: " . $e->getMessage();
-
+           // echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+            echo "Error Executor: " . $e->getMessage();
+            $resultbool = false;
         }
         $conn = null;
-
+        return $resultbool;
     }
 
     //Fonction sauvegardant les données dans les LOG
@@ -71,21 +72,23 @@ class Executor
             $result = $insertLog->execute($values);
             if ($result > 0){
                 $comment = 'Requete qui a bien été exécuté  dans les log !';
-                echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
-
+                //echo '<code><pre>'. print_r($comment, true) .'</pre></code>';
+                $resultat = true;
             }
             else {
                 $comment2 = 'Requete LOG synthaxiquement incorrecte !';
-                echo '<code><pre>'. print_r($comment2, true) .'</pre></code>';
+                //echo '<code><pre>'. print_r($comment2, true) .'</pre></code>';
+                $resultat = false;
             }
 
         }
 
         else {
-            echo 'Erreur requette !';
+            //echo 'Erreur requette !';
+            $resultat = false;
         }
         $conn = null;
-
+        return $resultat;
         /*$data = array(
           array('name' => 'John', 'age' => '25'),
           array('name' => 'Wendy', 'age' => '32')
